@@ -1,0 +1,9 @@
+{
+  "apiUrl": "%s(apiUrl)",
+  "apiKey": "%s(apiKey)",
+  "status": "%s(invoiceStatus)",
+  "page": "%s(page)",
+  "perPage": "%s(perPage)",
+  "clientId": "%s(clientId)",
+  "contactId": "%s(contactId)"
+}

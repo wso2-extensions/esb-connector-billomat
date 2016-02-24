@@ -1,0 +1,9 @@
+{
+  "apiUrl": "%s(apiUrl)",
+  "apiKey": "%s(apiKey)",
+  "status": "%s(deliveryNoteStatus)",
+  "from": "%s(deliveryNoteDate)",
+  "deliveryNoteNumber": "%s(deliveryNoteFullNumber)",
+  "clientId": "%s(clientId)",
+  "contactId": "%s(contactId)"
+}

@@ -47,7 +47,7 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
     @BeforeClass(alwaysRun = true)
     public void setEnvironment() throws Exception {
 
-        init("billomat-connector-1.0.1-SNAPSHOT");
+        init("billomat-connector-1.0.1");
         esbRequestHeadersMap = new HashMap<String, String>();
         apiRequestHeadersMap = new HashMap<String, String>();
         esbRequestHeadersMap.put("Accept-Charset", "UTF-8");

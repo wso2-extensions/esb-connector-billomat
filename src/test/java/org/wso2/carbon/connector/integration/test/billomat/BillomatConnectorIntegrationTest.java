@@ -206,13 +206,12 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
                 sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "esb_listClients_mandatory.json");
 
         final JSONObject esbResponse =
-                esbRestResponse.getBody().getJSONObject("clients").getJSONArray("client").getJSONObject(0);
+                esbRestResponse.getBody().getJSONObject("clients").getJSONObject("client");
 
         final String apiEndpoint = apiEndpointUrl + "/clients/" + authString;
         RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndpoint, "GET", apiRequestHeadersMap);
-
         final JSONObject apiResponse =
-                apiRestResponse.getBody().getJSONObject("clients").getJSONArray("client").getJSONObject(0);
+                apiRestResponse.getBody().getJSONObject("clients").getJSONObject("client");
 
         Assert.assertEquals(esbResponse.getString("id"), apiResponse.getString("id"));
         Assert.assertEquals(esbResponse.getString("created"), apiResponse.getString("created"));
@@ -454,8 +453,8 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
      * @throws JSONException
      * @throws java.io.IOException
      */
-    @Test(groups = {"wso2.esb"}, description = "billomat {listContacts} integration test with mandatory parameters.", dependsOnMethods = {
-            "testCreateContactWithMandatoryParameters", "testCreateContactWithOptionalParameters"})
+    @Test(groups = {"wso2.esb"}, description = "billomat {listContacts} integration test with mandatory parameters.",
+            dependsOnMethods = {"testCreateContactWithMandatoryParameters", "testCreateContactWithOptionalParameters"})
     public void testListContactsWithMandatoryParameters() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:listContacts");
@@ -484,8 +483,8 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
      * @throws JSONException
      * @throws java.io.IOException
      */
-    @Test(groups = {"wso2.esb"}, description = "billomat {listContacts} integration test with optional parameters.", dependsOnMethods = {
-            "testCreateContactWithMandatoryParameters", "testCreateContactWithOptionalParameters"})
+    @Test(groups = {"wso2.esb"}, description = "billomat {listContacts} integration test with optional parameters.",
+            dependsOnMethods = {"testCreateContactWithMandatoryParameters", "testCreateContactWithOptionalParameters"})
     public void testListContactsWithOptionalParameters() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:listContacts");
@@ -636,8 +635,8 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
      * @throws JSONException
      * @throws java.io.IOException
      */
-    @Test(groups = {"wso2.esb"}, description = "billomat {createInvoice} integration test with optional parameters.", dependsOnMethods = {
-            "testCreateContactWithMandatoryParameters"})
+    @Test(groups = {"wso2.esb"}, description = "billomat {createInvoice} integration test with optional parameters.",
+            dependsOnMethods = {"testCreateContactWithMandatoryParameters"})
     public void testCreateInvoiceWithOptionalParameters() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:createInvoice");
@@ -770,13 +769,15 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
      * @throws JSONException
      * @throws java.io.IOException
      */
-    @Test(groups = {"wso2.esb"}, description = "billomat {listInvoices} integration test with optional parameters.", dependsOnMethods = {
-            "testCreateInvoiceWithMandatoryParameters", "testCreateInvoiceWithOptionalParameters",
-            "testCreateContactWithMandatoryParameters"})
+    @Test(groups = {"wso2.esb"}, description = "billomat {listInvoices} integration test with optional parameters.",
+            dependsOnMethods = {"testCreateInvoiceWithMandatoryParameters", "testCreateInvoiceWithOptionalParameters",
+                    "testCreateContactWithMandatoryParameters"})
     public void testListInvoicesWithOptionalParameters() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:listInvoices");
-        sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "esb_listInvoices_optional.json");
+        RestResponse<JSONObject> esbRestResponse = sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
+                "esb_listInvoices_optional.json");
+        final JSONObject esbResponse = esbRestResponse.getBody().getJSONObject("invoices").getJSONObject("invoice");
 
         final String apiEndpoint =
                 apiEndpointUrl + "/invoices/" + authString + "&client_id="
@@ -786,15 +787,14 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
                         + connectorProperties.getProperty("contactId") + "&status="
                         + connectorProperties.getProperty("invoiceStatus");
         RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndpoint, "GET", apiRequestHeadersMap);
-
         final JSONObject apiResponse = apiRestResponse.getBody().getJSONObject("invoices").getJSONObject("invoice");
 
-        Assert.assertEquals(connectorProperties.getProperty("contactId"), apiResponse.getString("contact_id"));
-        Assert.assertEquals(connectorProperties.getProperty("clientId"), apiResponse.getString("client_id"));
-        Assert.assertEquals(connectorProperties.getProperty("invoiceStatus"), apiResponse.getString("status"));
-        Assert.assertEquals(connectorProperties.getProperty("page"), apiRestResponse.getBody()
-                .getJSONObject("invoices").getString("@page"));
-        Assert.assertEquals(connectorProperties.getProperty("perPage"),
+        Assert.assertEquals(esbResponse.getString("contact_id"), apiResponse.getString("contact_id"));
+        Assert.assertEquals(esbResponse.getString("client_id"), apiResponse.getString("client_id"));
+        Assert.assertEquals(esbResponse.getString("status"), apiResponse.getString("status"));
+        Assert.assertEquals(esbRestResponse.getBody().getJSONObject("invoices").getString("@page"),
+                apiRestResponse.getBody().getJSONObject("invoices").getString("@page"));
+        Assert.assertEquals(esbRestResponse.getBody().getJSONObject("invoices").getString("@page"),
                 apiRestResponse.getBody().getJSONObject("invoices").getString("@page"));
     }
 
@@ -1088,8 +1088,8 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
      * @throws JSONException
      * @throws java.io.IOException
      */
-    @Test(groups = {"wso2.esb"}, description = "billomat {getInvoiceItem} integration test with mandatory parameters.", dependsOnMethods = {
-            "testCreateInvoiceItemWithMandatoryParameters"})
+    @Test(groups = {"wso2.esb"}, description = "billomat {getInvoiceItem} integration test with mandatory parameters.",
+            dependsOnMethods = {"testCreateInvoiceItemWithMandatoryParameters"})
     public void testGetInvoiceItemWithMandatoryParameters() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:getInvoiceItem");
@@ -1142,8 +1142,8 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
      * @throws JSONException
      * @throws java.io.IOException
      */
-    @Test(groups = {"wso2.esb"}, description = "billomat {listInvoiceItems} integration test with mandatory parameters.", dependsOnMethods = {
-            "testCreateInvoiceItemWithMandatoryParameters", "testCreateInvoiceItemWithOptionalParameters"})
+    @Test(groups = {"wso2.esb"}, description = "billomat {listInvoiceItems} integration test with mandatory parameters.",
+            dependsOnMethods = {"testCreateInvoiceItemWithMandatoryParameters", "testCreateInvoiceItemWithOptionalParameters"})
     public void testListInvoiceItemsWithMandatoryParameters() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:listInvoiceItems");
@@ -1174,8 +1174,9 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
      * @throws JSONException
      * @throws java.io.IOException
      */
-    @Test(groups = {"wso2.esb"}, description = "billomat {listInvoiceItems} integration test with optional parameters.", dependsOnMethods = {
-            "testCreateInvoiceItemWithMandatoryParameters", "testCreateInvoiceItemWithOptionalParameters"})
+    @Test(groups = {"wso2.esb"}, description = "billomat {listInvoiceItems} integration test with optional parameters.",
+            dependsOnMethods = {"testCreateInvoiceItemWithMandatoryParameters",
+                    "testCreateInvoiceItemWithOptionalParameters"})
     public void testListInvoiceItemsWithOptionalParameters() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:listInvoiceItems");
@@ -1435,7 +1436,8 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
      * @throws java.io.IOException
      */
     @Test(groups = {"wso2.esb"}, description = "billomat {listDeliveryNotes} integration test with mandatory parameters.",
-            dependsOnMethods = {"testCreateDeliveryNoteWithMandatoryParameters", "testCreateDeliveryNoteWithOptionalParameters"})
+            dependsOnMethods = {"testCreateDeliveryNoteWithMandatoryParameters",
+                    "testCreateDeliveryNoteWithOptionalParameters"})
     public void testListDeliveryNotesWithMandatoryParameters() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:listDeliveryNotes");
@@ -1465,7 +1467,8 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
      * @throws java.io.IOException
      */
     @Test(groups = {"wso2.esb"}, description = "billomat {listDeliveryNotes} integration test with mandatory parameters.",
-            dependsOnMethods = {"testCreateDeliveryNoteWithMandatoryParameters", "testCreateDeliveryNoteWithOptionalParameters"})
+            dependsOnMethods = {"testCreateDeliveryNoteWithMandatoryParameters",
+                    "testCreateDeliveryNoteWithOptionalParameters"})
     public void testListDeliveryNotesWithOptionalParameters() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:listDeliveryNotes");
@@ -1514,5 +1517,4 @@ public class BillomatConnectorIntegrationTest extends ConnectorIntegrationTestBa
         Assert.assertEquals(esbRestResponse.getBody().getJSONObject("errors").get("error"), apiRestResponse.getBody()
                 .getJSONObject("errors").get("error"));
     }
-
 }

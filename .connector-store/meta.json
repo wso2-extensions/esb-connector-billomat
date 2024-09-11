@@ -4,7 +4,7 @@
     "category": "Billing and Accounting",
     "documentationUrl": "https://docs.wso2.com/display/ESBCONNECTORS/Billomat+Connector",
     "description": "The Billomat connector allows you to access the Billomat REST API through the WSO2 ESB. Billomat is an easy and free online billing software for all English speaking countries.",
-    "status": "Active",
+    "status": "Inactive",
     "labels": [
         "connector"
     ],
